@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>?̵̡̧̛̜̲̗̭͙̺̲̠̝̖͖̯̮̟̱͓͈̬̒͒͊͊͗̏͌͑͋̔͆͋͒́̀̓̽̒͛̚͝͝?̴̢̛̦̝̐́͂̅̈́͂̈̒͐̎͐̈́̕͝?̶̮͓͔̜͍͙̟̉̈́̀̆̒̋̿͝͠</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 20px;
+            background: #222;
+            border-bottom: 2px solid #444;
+        }
+        h1 {
+            color: #f00;
+            margin: 0;
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid #666;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            max-width: 600px;
+            position: relative;
+            color: #eee;
+        }
+        .clue {
+            margin: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #444;
+            border-radius: 5px;
+            position: relative;
+        }
+        input[type="text"] {
+            background-color: #333;
+            color: #0f0;
+            border: 1px solid #555;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #222;
+            color: #0f0;
+            border: 1px solid #555;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #444;
+        }
+        .hidden {
+            display: none;
+        }
+        #console {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            text-align: left;
+            margin: 20px auto;
+            max-width: 600px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>?̵̡̧̛̜̲̗̭͙̺̲̠̝̖͖̯̮̟̱͓͈̬̒͒͊͊͗̏͌͑͋̔͆͋͒́̀̓̽̒͛̚͝͝?̴̢̛̦̝̐́͂̅̈́͂̈̒͐̎͐̈́̕͝?̶̮͓͔̜͍͙̟̉̈́̀̆̒̋̿͝͠</h1>
+    </header>
+    <div class="container">
+        <div id="puzzleArea" class="clue">
+            <h2 id="clueText">Loading...</h2>
+        </div>
+        <div id="console" class="hidden"></div>
+    </div>
+
+    <script>
+        let currentPuzzleIndex = 0;
+
+        const puzzles = [
+            { type: 'riddle', text: 'What has keys but can’t open locks?', answer: 'piano' },
+            { type: 'code', text: 'Decode this message: "Uifsf jt b tfdsfu dpssz!"', answer: 'There is a secret carry!' },
+            { type: 'riddle', text: 'I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?', answer: 'echo' },
+            { type: 'code', text: 'Decrypt: "Hfnosn Mzoi" (Caesar cipher, shift 5)', answer: 'Eclipse Sun' },
+            { type: 'riddle', text: 'The more you take, the more you leave behind. What am I?', answer: 'footsteps' },
+            { type: 'code', text: 'Crack the code: "1234" reversed and then each digit increased by 1', answer: '5678' },
+            { type: 'riddle', text: 'I can be cracked, made, told, and played. What am I?', answer: 'joke' },
+            { type: 'code', text: 'What is the result of the binary addition 1010 + 1101?', answer: '10011' },
+            { type: 'riddle', text: 'What has a heart that doesn’t beat?', answer: 'artichoke' },
+            { type: 'code', text: 'Solve the puzzle: "Rkqj qdky" (Shift each letter back by 3)', answer: 'One says' },
+            { type: 'riddle', text: 'What has a neck but no head?', answer: 'bottle' },
+            { type: 'code', text: 'Reverse and decode: "3hba!s0" (Base64)', answer: 'Hello World' },
+            { type: 'riddle', text: 'What can travel around the world while staying in a corner?', answer: 'stamp' },
+            { type: 'code', text: 'Find the next number in the sequence: 2, 6, 12, 20, ?', answer: '30' },
+            { type: 'riddle', text: 'What has hands but can’t clap?', answer: 'clock' },
+            { type: 'code', text: 'Hexadecimal to decimal: "1A3"', answer: '419' },
+            { type: 'riddle', text: 'What has a thumb and four fingers but is not alive?', answer: 'glove' },
+            { type: 'code', text: 'Decrypt this hex: "48656c6c6f" (ASCII)', answer: 'Hello' },
+            { type: 'riddle', text: 'What is full of holes but still holds water?', answer: 'sponge' },
+            { type: 'code', text: 'Solve the equation: 5x - 3 = 12', answer: '3' },
+            { type: 'riddle', text: 'What is always in front of you but can’t be seen?', answer: 'future' },
+            { type: 'code', text: 'Decode the binary: "01001000 01100101 01101100 01101100 01101111"', answer: 'Hello' },
+            { type: 'riddle', text: 'What gets wetter as it dries?', answer: 'towel' },
+            { type: 'code', text: 'Encrypt "HELLO" with a Caesar cipher, shift 3', answer: 'KHOOR' },
+            { type: 'riddle', text: 'What begins with T, ends with T, and has T in it?', answer: 'teapot' },
+            { type: 'code', text: 'What is the decimal value of the binary 1111?', answer: '15' },
+            { type: 'riddle', text: 'What has many keys but can’t open any door?', answer: 'piano' },
+            { type: 'code', text: 'Decrypt the message: "Dpef!qspkfdu" (Shift each letter back by 1)', answer: 'Code!protection' },
+            { type: 'riddle', text: 'What is black when it’s clean and white when it’s dirty?', answer: 'chalkboard' },
+            { type: 'code', text: 'Binary to text: "01001000 01100101 01101100 01101100 01101111"', answer: 'Hello' },
+            { type: 'riddle', text: 'What can be broken but never held?', answer: 'promise' },
+            { type: 'code', text: 'Solve the Sudoku puzzle', answer: 'Completed Sudoku' },
+            { type: 'riddle', text: 'What has a head and a tail but no body?', answer: 'coin' },
+            { type: 'code', text: 'Binary code: "00100000" (What does it represent in ASCII?)', answer: 'Space' },
+            { type: 'riddle', text: 'What has many teeth but can’t bite?', answer: 'comb' },
+            { type: 'code', text: 'Decode this Base64: "SGVsbG8gd29ybGQ="', answer: 'Hello world' },
+            { type: 'riddle', text: 'What is always coming but never arrives?', answer: 'tomorrow' },
+            { type: 'code', text: 'What is the result of the binary operation 1101 XOR 1010?', answer: '0111' },
+            { type: 'riddle', text: 'What can you catch but not throw?', answer: 'cold' },
+            { type: 'code', text: 'Decrypt: "Yhgz lhfz" (Caesar cipher, shift 5)', answer: 'Time is up' },
+            { type: 'riddle', text: 'What has a bed but never sleeps, can run but never walks, and has a bank but no money?', answer: 'river' },
+            { type: 'code', text: 'Hexadecimal to binary: "7F"', answer: '01111111' },
+            { type: 'riddle', text: 'What is light as a feather, yet the strongest man can’t hold it for much longer than a minute?', answer: 'breath' },
+            { type: 'code', text: 'Binary to hexadecimal: "10101010"', answer: 'AA' },
+            { type: 'riddle', text: 'What can be seen in the middle of the night but not in the morning?', answer: 'stars' },
+            { type: 'code', text: 'ASCII to text: "72 65 6c 6c 6f"', answer: 'Hello' },
+            { type: 'riddle', text: 'What goes up but never comes down?', answer: 'age' },
+            { type: 'code', text: 'Solve the equation: 3x + 7 = 16', answer: '3' },
+            { type: 'riddle', text: 'What has a ring but no finger?', answer: 'telephone' },
+            { type: 'code', text: 'Decrypt this message: "Mjqqt btwqi!" (Shift each letter back by 5)', answer: 'Hello World!' },
+            { type: 'riddle', text: 'What is the capital of France?', answer: 'Paris' },
+            { type: 'code', text: 'Binary to decimal: "1100"', answer: '12' },
+            { type: 'riddle', text: 'What gets bigger the more you take away from it?', answer: 'hole' },
+            { type: 'code', text: 'Base64 decode: "SGVsbG8="', answer: 'Hello' },
+            { type: 'riddle', text: 'What is so fragile that saying its name breaks it?', answer: 'silence' },
+            { type: 'code', text: 'Caesar cipher shift 7: "Uhl r slph!"', answer: 'The a type!' },
+            { type: 'riddle', text: 'What has four wheels and flies?', answer: 'garbage truck' },
+            { type: 'code', text: 'Hexadecimal to ASCII: "4d 61 72 79"', answer: 'Mary' },
+            { type: 'riddle', text: 'What is the smallest whole number?', answer: '0' },
+            { type: 'code', text: 'Binary addition 1011 + 1100', answer: '10111' },
+            { type: 'riddle', text: 'What has no legs but can run?', answer: 'water' },
+            { type: 'code', text: 'Convert binary "11111111" to decimal', answer: '255' },
+            { type: 'riddle', text: 'What has an end but no beginning?', answer: 'road' },
+            { type: 'code', text: 'Hexadecimal to decimal: "1F"', answer: '31' },
+            { type: 'riddle', text: 'What is always moving but never gets tired?', answer: 'clock' },
+            { type: 'code', text: 'Base64 encode "Encryption"', answer: 'RW5jcnlwdGlvbg==' },
+            { type: 'riddle', text: 'What has an eye but cannot see?', answer: 'needle' },
+            { type: 'code', text: 'Binary to hexadecimal: "0011 1100"', answer: '3C' },
+            { type: 'riddle', text: 'What is made of water but if you put it into water it will die?', answer: 'ice' },
+            { type: 'code', text: 'Decimal to binary: 65', answer: '1000001' },
+            { type: 'riddle', text: 'What belongs to you but others use it more than you do?', answer: 'name' },
+            { type: 'code', text: 'Convert hexadecimal "FF" to decimal', answer: '255' },
+            { type: 'riddle', text: 'What has one eye but can’t see?', answer: 'needle' },
+            { type: 'code', text: 'Binary addition 1110 + 0011', answer: '10001' },
+            { type: 'riddle', text: 'What starts with an E, ends with an E, but only contains one letter?', answer: 'envelope' },
+            { type: 'code', text: 'Convert decimal 10 to binary', answer: '1010' },
+            { type: 'riddle', text: 'What has a thumb and four fingers but is not alive?', answer: 'glove' },
+            { type: 'code', text: 'Decrypt: "Wklv lv d whvw" (Caesar cipher, shift 3)', answer: 'This is a test' },
+            { type: 'riddle', text: 'What has many keys but can’t open any door?', answer: 'piano' },
+            { type: 'code', text: 'Binary to ASCII: "01001000 01100101 01101100 01101100 01101111"', answer: 'Hello' },
+            { type: 'riddle', text: 'What is always in front of you but can’t be seen?', answer: 'future' },
+            { type: 'code', text: 'Convert hexadecimal "7F" to binary', answer: '01111111' },
+            { type: 'riddle', text: 'What gets wetter as it dries?', answer: 'towel' },
+            { type: 'code', text: 'Binary subtraction 1100 - 1010', answer: '0100' },
+            { type: 'riddle', text: 'What is white when it’s dirty and black when it’s clean?', answer: 'chalkboard' },
+            { type: 'code', text: 'Convert binary "11001100" to decimal', answer: '204' },
+            { type: 'riddle', text: 'What has keys but can’t open locks?', answer: 'piano' },
+            { type: 'code', text: 'Binary to decimal: "101010"', answer: '42' },
+            { type: 'riddle', text: 'What can be cracked, made, told, and played?', answer: 'joke' },
+            { type: 'code', text: 'Hexadecimal "1C" to decimal', answer: '28' },
+            { type: 'riddle', text: 'What is so delicate that saying its name breaks it?', answer: 'silence' },
+            { type: 'code', text: 'Convert decimal 255 to binary', answer: '11111111' },
+            { type: 'riddle', text: 'What can be seen in the middle of the night but not in the morning?', answer: 'stars' },
+            { type: 'code', text: 'Binary to hexadecimal: "1111"', answer: 'F' },
+            { type: 'riddle', text: 'What is always coming but never arrives?', answer: 'tomorrow' },
+            { type: 'code', text: 'Convert binary "00001111" to decimal', answer: '15' },
+            { type: 'riddle', text: 'What has many teeth but can’t bite?', answer: 'comb' },
+            { type: 'code', text: 'Decimal to hexadecimal: 128', answer: '80' },
+            { type: 'riddle', text: 'What is the capital of Japan?', answer: 'Tokyo' },
+            { type: 'code', text: 'Binary to ASCII: "01001000 01100101 01101100 01101100 01101111"', answer: 'Hello' },
+            { type: 'riddle', text: 'What is always in front of you but can’t be seen?', answer: 'future' },
+            { type: 'code', text: 'Convert hexadecimal "5A" to decimal', answer: '90' },
+            { type: 'riddle', text: 'What starts with T, ends with T, and has T in it?', answer: 'teapot' },
+            { type: 'code', text: 'Binary addition 1011 + 1101', answer: '10000' },
+            { type: 'riddle', text: 'What can you catch but not throw?', answer: 'cold' },
+            { type: 'code', text: 'Hexadecimal "3E" to binary', answer: '00111110' },
+            { type: 'riddle', text: 'What has one eye but cannot see?', answer: 'needle' },
+            { type: 'code', text: 'Binary to decimal: "1001001"', answer: '73' },
+            { type: 'riddle', text: 'What has a bed but never sleeps, can run but never walks?', answer: 'river' },
+            { type: 'code', text: 'Convert decimal 255 to hexadecimal', answer: 'FF' },
+            { type: 'riddle', text: 'What has a heart that doesn’t beat?', answer: 'artichoke' },
+            { type: 'code', text: 'Decimal to binary: 8', answer: '1000' },
+            { type: 'riddle', text: 'What is the largest organ in the human body?', answer: 'skin' },
+            { type: 'code', text: 'Convert binary "101010" to hexadecimal', answer: '2A' },
+            { type: 'riddle', text: 'What can be broken but never held?', answer: 'promise' },
+            { type: 'code', text: 'Hexadecimal to binary: "F"', answer: '1111' },
+            { type: 'riddle', text: 'What is the smallest prime number?', answer: '2' }
+        ];
+
+        function loadPuzzle() {
+            const puzzle = puzzles[currentPuzzleIndex];
+            const puzzleArea = document.getElementById('puzzleArea');
+            const consoleArea = document.getElementById('console');
+            puzzleArea.innerHTML = ''; // Clear previous content
+            consoleArea.classList.add('hidden');
+
+            if (puzzle.type === 'code') {
+                puzzleArea.innerHTML = `<h2 id="clueText">${puzzle.text}</h2>
+                                         <input type="text" id="answer" placeholder="Your answer">
+                                         <button onclick="checkAnswer('${puzzle.answer}')">Submit Answer</button>`;
+            } else if (puzzle.type === 'riddle') {
+                puzzleArea.innerHTML = `<h2 id="clueText">${puzzle.text}</h2>
+                                         <input type="text" id="answer" placeholder="Your answer">
+                                         <button onclick="checkAnswer('${puzzle.answer}')">Submit Answer</button>`;
+            }
+        }
+
+        function nextPuzzle() {
+            currentPuzzleIndex = (currentPuzzleIndex + 1) % puzzles.length;
+            loadPuzzle();
+        }
+
+        function checkAnswer(correctAnswer) {
+            const userAnswer = document.getElementById('answer').value.trim().toLowerCase();
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                alert('Correct! Moving to the next puzzle.');
+                nextPuzzle();
+            } else {
+                alert('Incorrect answer. Try again.');
+            }
+        }
+
+        // Initialize the first puzzle
+        loadPuzzle();
+    </script>
+</body>
+</html>
